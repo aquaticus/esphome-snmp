@@ -231,7 +231,9 @@ void SNMPComponent::setup_wifi_mib_() {
 
   // IP
   snmp_agent_.addDynamicReadOnlyStringHandler(
-      CUSTOM_OID "4.4.0", []() -> std::string { return wifi::global_wifi_component->wifi_sta_ip().str(); });
+      CUSTOM_OID "4.4.0", []() -> std::string { 
+        const auto& ip_array = wifi::global_wifi_component->wifi_sta_ip_addresses();
+        return ip_array.size() ? wifi::global_wifi_component->wifi_sta_ip_addresses()[0].str() : ""; } );
 }
 
 void SNMPComponent::setup() {
