@@ -19,6 +19,7 @@ CONFIG_SCHEMA = cv.All(
             cv.Optional("location", default=""): cv.string_strict,
         }
     ),
+    cv.only_with_arduino,
 )
 
 
