@@ -1,7 +1,5 @@
 #pragma once
 
-#ifdef USE_ARDUINO
-
 #include <string>
 #include "esphome/core/component.h"
 #include "esphome/core/hal.h"
@@ -71,5 +69,3 @@ class SNMPComponent : public Component {
 
 }  // namespace snmp
 }  // namespace esphome
-
-#endif  // USE_ARDUINO
