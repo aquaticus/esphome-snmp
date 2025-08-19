@@ -23,8 +23,21 @@ namespace snmp {
 
 class SNMPComponent : public Component {
  public:
-  SNMPComponent() : snmp_agent_("public", "private"){};
-  void setup() override;
+  //SNMPComponent() : snmp_agent_("public", "private"){};
+  //void setup() override;
+  public:
+  void setup() override {
+    // Initialize SNMP with configurable communities
+    SNMP_Agent.begin("ESPHome Device", "ESPHome Location", "ESPHome Description", 0, SNMP_VERSION_2c, this->read_community_.c_str(), this->write_community_.c_str(), SNMP_ENGINE_TIME_SOURCE_NONE);
+    // Rest of the setup code remains the same...
+  }
+
+  // Setter for read community
+  void set_read_community(const std::string &community) { this->read_community_ = community; }
+
+  // Setter for write community
+  void set_write_community(const std::string &community) { this->write_community_ = community; }
+
   void dump_config() override;
   float get_setup_priority() const override { return setup_priority::AFTER_WIFI; }
   void loop() override;
@@ -36,6 +49,9 @@ class SNMPComponent : public Component {
  protected:
   WiFiUDP udp_;
   SNMPAgent snmp_agent_;
+
+  std::string read_community_ = "public";  // Default value
+  std::string write_community_ = "private";  // Default value
 
   void setup_system_mib_();
   void setup_storage_mib_();

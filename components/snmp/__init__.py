@@ -17,6 +17,8 @@ CONFIG_SCHEMA = cv.All(
             cv.GenerateID(): cv.declare_id(SNMPComponent),
             cv.Optional("contact", default=""): cv.string_strict,
             cv.Optional("location", default=""): cv.string_strict,
+            cv.Optional('read_community', default='public'): cv.string,
+            cv.Optional('write_community', default='private'): cv.string,            
         }
     ),
     cv.only_with_arduino,
@@ -28,6 +30,8 @@ async def to_code(config):
 
     cg.add(var.set_location(config["location"]))
     cg.add(var.set_contact(config["contact"]))
+    cg.add(var.set_read_community(config['read_community']))
+    cg.add(var.set_write_community(config['write_community']))
 
     await cg.register_component(var, config)
 
