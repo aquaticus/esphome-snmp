@@ -3,7 +3,7 @@
 #include "esphome/core/application.h"
 #include "esphome/core/version.h"
 #include "esphome/components/wifi/wifi_component.h"
-#include "esphome/components/wifisignal/wifi_signal_sensor.h"
+#include "esphome/components/wifi_signal/wifi_signal_sensor.h"
 
 // Integration test available: https://github.com/aquaticus/esphome_snmp_tests
 
