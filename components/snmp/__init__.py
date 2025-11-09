@@ -9,6 +9,7 @@ CODEOWNERS = ["@aquaticus"]
 DEPENDENCIES = ["wifi"]
 
 snmp_ns = cg.esphome_ns.namespace("snmp")
+wifi_ns = cg.esphome_ns.namespace("wifi")
 SNMPComponent = snmp_ns.class_("SNMPComponent", cg.Component)
 WiFiComponent = wifi_ns.class_("WiFiComponent", cg.Component)
 
