@@ -265,7 +265,7 @@ void SNMPComponent::dump_config() {
 
 void SNMPComponent::loop() { snmp_agent_.loop(); }
 
-#ifdef USE_ESP32
+#ifndef USE_ESP8266
 int SNMPComponent::get_ram_size_kb() {
   // use hardcoded values (number of values in esp_chip_model_t depends on IDF version)
   // from esp_system.h
