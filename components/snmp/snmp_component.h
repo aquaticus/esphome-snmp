@@ -5,13 +5,12 @@
 #include "esphome/core/hal.h"
 #include "SNMP_Agent.h"
 
-#ifdef USE_ESP32
+#ifdef USE_ESP8266
+#include <ESP8266WiFi.h>
+#else
 #include <WiFi.h>
 #include <Esp.h>
 #include "esp_chip_info.h"
-#endif
-#ifdef USE_ESP8266
-#include <ESP8266WiFi.h>
 #endif
 #include <WiFiUdp.h>
 
@@ -39,15 +38,14 @@ class SNMPComponent : public Component {
 
   void setup_system_mib_();
   void setup_storage_mib_();
-#ifdef USE_ESP32
-  void setup_esp32_heap_mib_();
-#endif
 #ifdef USE_ESP8266
   void setup_esp8266_heap_mib_();
+#else
+  void setup_esp32_heap_mib_();
 #endif
   void setup_chip_mib_();
   void setup_wifi_mib_();
-#ifdef USE_ESP32
+#ifndef USE_ESP8266
   static int setup_psram_size(int *used);
 #endif
 
@@ -57,7 +55,7 @@ class SNMPComponent : public Component {
 
   static std::string get_bssid();
 
-#ifdef USE_ESP32
+#ifndef USE_ESP8266
   static int get_ram_size_kb();
 #endif
 
