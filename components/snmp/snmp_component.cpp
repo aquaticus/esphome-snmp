@@ -3,6 +3,7 @@
 #include "esphome/core/application.h"
 #include "esphome/core/version.h"
 #include "esphome/components/wifi/wifi_component.h"
+#include "esphome/components/wifisignal/wifi_signal_sensor.h"
 
 // Integration test available: https://github.com/aquaticus/esphome_snmp_tests
 
@@ -212,7 +213,7 @@ void SNMPComponent::setup_chip_mib_() {
 
 void SNMPComponent::setup_wifi_mib_() {
   // RSSI
-  snmp_agent_.addDynamicIntegerHandler(CUSTOM_OID "4.1.0", []() -> int { return wifi::global_wifi_component->wifi_rssi(); });
+  snmp_agent_.addDynamicIntegerHandler(CUSTOM_OID "4.1.0", []() -> int { return WiFiComponent::wifi_rssi() { return WiFi.RSSI(); } });
 
   // BSSID
   snmp_agent_.addDynamicReadOnlyStringHandler(CUSTOM_OID "4.2.0", get_bssid);
