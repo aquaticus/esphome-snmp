@@ -30,7 +30,9 @@ void SNMPComponent::setup_system_mib_() {
   // sysDesc
   const char *desc_fmt = "ESPHome version " ESPHOME_VERSION " compiled %s, Board " ESPHOME_BOARD;
   char description[128];
-  snprintf(description, sizeof(description), desc_fmt, App.get_compilation_time().c_str());
+  char build_time_str[Application::BUILD_TIME_STR_SIZE];
+  App.get_build_time_string(build_time_str);
+  snprintf(description, sizeof(description), desc_fmt, build_time_str);
   snmp_agent_.addReadOnlyStaticStringHandler(RFC1213_OID_sysDescr, description);
 
   // sysName
