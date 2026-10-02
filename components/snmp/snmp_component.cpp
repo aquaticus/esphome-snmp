@@ -3,6 +3,7 @@
 #include "esphome/core/application.h"
 #include "esphome/core/version.h"
 #include "esphome/components/wifi/wifi_component.h"
+#include "esphome/components/network/ip_address.h"
 
 // Integration test available: https://github.com/aquaticus/esphome_snmp_tests
 
@@ -226,14 +227,21 @@ void SNMPComponent::setup_wifi_mib_() {
   snmp_agent_.addDynamicReadOnlyStringHandler(CUSTOM_OID "4.2.0", get_bssid);
 
   // SSID
-  snmp_agent_.addDynamicReadOnlyStringHandler(CUSTOM_OID "4.3.0",
-                                              []() -> std::string { return wifi::global_wifi_component->wifi_ssid(); });
+  snmp_agent_.addDynamicReadOnlyStringHandler(CUSTOM_OID "4.3.0", []() -> std::string {
+    char ssid_buf[wifi::SSID_BUFFER_SIZE];
+    return wifi::global_wifi_component->wifi_ssid_to(ssid_buf);
+  });
 
   // IP
-  snmp_agent_.addDynamicReadOnlyStringHandler(
-      CUSTOM_OID "4.4.0", []() -> std::string { 
-        const auto& ip_array = wifi::global_wifi_component->wifi_sta_ip_addresses();
-        return ip_array.size() ? wifi::global_wifi_component->wifi_sta_ip_addresses()[0].str() : ""; } );
+  snmp_agent_.addDynamicReadOnlyStringHandler(CUSTOM_OID "4.4.0", []() -> std::string {
+    const auto ip_addresses = wifi::global_wifi_component->wifi_sta_ip_addresses();
+    const auto &ip = ip_addresses[0];
+    if (!ip.is_set()) {
+      return "";
+    }
+    char ip_buf[network::IP_ADDRESS_BUFFER_SIZE];
+    return ip.str_to(ip_buf);
+  });
 }
 
 void SNMPComponent::setup() {
