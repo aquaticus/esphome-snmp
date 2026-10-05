@@ -233,6 +233,17 @@ void SNMPComponent::setup_wifi_mib_() {
   });
 
   // IP
+  // NOTE: network::IPAddress::str() was removed in ESPHome 2026.8.0
+  // (see esphome/esphome#17589). Replaced with str_to(), which writes
+  // into a caller-supplied buffer instead of returning a std::string.
+  snmp_agent_.addDynamicReadOnlyStringHandler(
+      CUSTOM_OID "4.4.0", []() -> std::string {
+        const auto& ip_array = wifi::global_wifi_component->wifi_sta_ip_addresses();
+        if (ip_array.empty())
+          return "";
+        char buf[46];  // enough for IPv4 or IPv6
+        return ip_array[0].str_to(buf);
+      } );
   snmp_agent_.addDynamicReadOnlyStringHandler(CUSTOM_OID "4.4.0", []() -> std::string {
     const auto ip_addresses = wifi::global_wifi_component->wifi_sta_ip_addresses();
     const auto &ip = ip_addresses[0];
